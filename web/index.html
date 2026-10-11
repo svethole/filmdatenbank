@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filmothek</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <div class="bar-row">
+    <a class="logo" href="#" id="logo" title="Zur Übersicht">
+      <img src="icon.svg" alt="" width="34" height="34">
+      <span>Filmothek</span>
+    </a>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      <input id="search" type="search" placeholder="Suchen: Titel, Darsteller, Stichwort …" autocomplete="off" aria-label="Suche">
+      <button id="clearSearch" class="clear" title="Suche löschen" aria-label="Suche löschen" hidden>✕</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="scanBtn" title="Nach neuen Filmen suchen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>
+        <span id="scanLabel">Bibliothek aktualisieren</span>
+      </button>
+      <button class="btn icon" id="settingsBtn" title="Einstellungen" aria-label="Einstellungen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="bar-row second">
+    <label class="field">
+      <span>Sortieren:</span>
+      <select id="sort">
+        <option value="title">Titel (A–Z)</option>
+        <option value="year_desc">Erscheinungsjahr – neueste zuerst</option>
+        <option value="year_asc">Erscheinungsjahr – älteste zuerst</option>
+        <option value="genre">Kategorie (Komödie, Krimi …)</option>
+        <option value="added">Zuletzt hinzugefügt</option>
+      </select>
+    </label>
+
+    <label class="check"><input type="checkbox" id="series"><span>Filmreihen zusammenfassen</span></label>
+    <label class="check"><input type="checkbox" id="sidebar"><span>Details in Seitenleiste öffnen</span></label>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="progress" id="progress" hidden><div id="progressFill"></div></div>
+</header>
+
+<main id="main">
+  <div id="grid"></div>
+</main>
+
+<!-- Detailansicht als eigene Seite -->
+<section id="page" hidden>
+  <div class="backbar"><button class="btn back" data-close>← Zurück zur Übersicht</button></div>
+  <div id="pageBody"></div>
+</section>
+
+<!-- Detailansicht als Seitenleiste -->
+<div class="scrim" id="scrim" hidden data-close></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head"><button class="btn back" data-close>✕ Schließen</button></div>
+  <div id="drawerBody"></div>
+</aside>
+
+<!-- Einstellungen -->
+<dialog id="settings">
+  <form method="dialog" id="settingsForm">
+    <h2>Einstellungen</h2>
+
+    <label class="lbl" for="cfgPath">Ordner mit den Filmen</label>
+    <p class="hint">Alle Unterordner werden automatisch mitgelesen.</p>
+    <div class="path-row">
+      <input id="cfgPath" type="text" placeholder="/Volumes/Filme" spellcheck="false">
+      <button type="button" class="btn" id="chooseFolder" hidden>Ordner auswählen …</button>
+    </div>
+    <div class="volumes" id="volumes"></div>
+
+    <label class="lbl" for="cfgKey">TMDB-Schlüssel (für Cover und Filminfos)</label>
+    <p class="hint">Kostenlos erhältlich auf <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">themoviedb.org → Einstellungen → API</a>. Es geht der „API-Schlüssel“ oder der lange „Lesezugriffs-Token“.</p>
+    <input id="cfgKey" type="text" spellcheck="false" autocomplete="off" placeholder="z. B. 1a2b3c4d…">
+
+    <p class="form-msg" id="cfgMsg"></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn ghost" id="cfgCancel">Abbrechen</button>
+      <button type="button" class="btn" id="cfgSave">Speichern</button>
+      <button type="button" class="btn primary" id="cfgSaveScan">Speichern &amp; Filme einlesen</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
